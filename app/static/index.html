@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EMI Ledger — Loan Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14171F;
+    --ink-soft: #1D212C;
+    --paper: #EDEAE1;
+    --paper-dim: #B9B4A6;
+    --gold: #C9A24B;
+    --gold-dim: #8A7333;
+    --rule: #33384A;
+    --green: #6FA97A;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+  header {
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 24px;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 34px;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .sub {
+    color: var(--paper-dim);
+    font-size: 15px;
+    max-width: 46ch;
+    line-height: 1.5;
+  }
+  form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+    color: var(--paper-dim);
+    text-transform: uppercase;
+  }
+  input {
+    background: var(--ink-soft);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    color: var(--paper);
+    padding: 10px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+  }
+  input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  button {
+    grid-column: 1 / -1;
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    border-radius: 4px;
+    padding: 12px 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  button:hover { background: #DBB65C; }
+  button:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
+
+  #results { display: none; }
+  #results.visible { display: block; }
+
+  .ledger-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 28px 0 20px;
+  }
+  .ledger-line .tick {
+    flex: 1;
+    height: 1px;
+    background: repeating-linear-gradient(90deg, var(--rule) 0 6px, transparent 6px 12px);
+  }
+  .ledger-line span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--paper-dim);
+  }
+
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .figure {
+    background: var(--ink-soft);
+    padding: 18px 16px;
+  }
+  .figure .label {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--paper-dim);
+    margin-bottom: 8px;
+  }
+  .figure .value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  thead th {
+    text-align: right;
+    color: var(--paper-dim);
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0 10px 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+  thead th:first-child, tbody td:first-child { text-align: left; }
+  tbody td {
+    text-align: right;
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(51,56,74,0.5);
+  }
+  .schedule-scroll {
+    max-height: 320px;
+    overflow-y: auto;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+  }
+
+  .status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--paper-dim);
+    margin-top: 8px;
+  }
+  .status.error { color: #D97757; }
+
+  @media (max-width: 640px) {
+    form, .figures { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Loan Ledger · v1.0</div>
+    <h1>EMI Calculator</h1>
+    <p class="sub">Enter a principal, rate, and tenure to see the monthly installment and the full month-by-month breakdown of what goes to interest versus principal.</p>
+  </header>
+
+  <form id="emi-form">
+    <label>Principal (₹)
+      <input type="number" id="principal" value="500000" min="1" step="1000" required />
+    </label>
+    <label>Annual Rate (%)
+      <input type="number" id="rate" value="10.5" min="0" step="0.1" required />
+    </label>
+    <label>Tenure (months)
+      <input type="number" id="tenure" value="24" min="1" step="1" required />
+    </label>
+    <button type="submit">Calculate EMI</button>
+  </form>
+
+  <div class="status" id="status"></div>
+
+  <div id="results">
+    <div class="ledger-line"><span>Summary</span><div class="tick"></div></div>
+    <div class="figures">
+      <div class="figure">
+        <div class="label">Monthly EMI</div>
+        <div class="value" id="out-emi">—</div>
+      </div>
+      <div class="figure">
+        <div class="label">Total Interest</div>
+        <div class="value" id="out-interest">—</div>
+      </div>
+      <div class="figure">
+        <div class="label">Total Payment</div>
+        <div class="value" id="out-total">—</div>
+      </div>
+    </div>
+
+    <div class="ledger-line"><span>Amortization Schedule</span><div class="tick"></div></div>
+    <div class="schedule-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>EMI</th>
+            <th>Principal</th>
+            <th>Interest</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody id="schedule-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Change this to your deployed API URL once hosted
+  const API_BASE = window.location.origin;
+
+  const form = document.getElementById('emi-form');
+  const statusEl = document.getElementById('status');
+  const results = document.getElementById('results');
+
+  function fmt(n) {
+    return '₹' + Number(n).toLocaleString('en-IN', { maximumFractionDigits: 0 });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    statusEl.textContent = 'Calculating…';
+    statusEl.className = 'status';
+
+    const payload = {
+      principal: parseFloat(document.getElementById('principal').value),
+      annual_rate: parseFloat(document.getElementById('rate').value),
+      tenure_months: parseInt(document.getElementById('tenure').value, 10),
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/calculate/amortization`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('Request failed');
+      const data = await res.json();
+
+      document.getElementById('out-emi').textContent = fmt(data.emi);
+      document.getElementById('out-interest').textContent = fmt(data.total_interest);
+      document.getElementById('out-total').textContent = fmt(data.total_payment);
+
+      const tbody = document.getElementById('schedule-body');
+      tbody.innerHTML = '';
+      data.schedule.forEach((row) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${row.month}</td>
+          <td>${fmt(row.emi)}</td>
+          <td>${fmt(row.principal_component)}</td>
+          <td>${fmt(row.interest_component)}</td>
+          <td>${fmt(row.balance)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      results.classList.add('visible');
+      statusEl.textContent = '';
+
+      // Also log to /calculate/emi so it's saved to history
+      fetch(`${API_BASE}/calculate/emi`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+    } catch (err) {
+      statusEl.textContent = 'Something went wrong. Is the API running?';
+      statusEl.className = 'status error';
+    }
+  });
+</script>
+</body>
+</html>
