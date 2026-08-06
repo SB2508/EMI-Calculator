@@ -77,10 +77,10 @@ emi-calculator/
 └── README.md
 ```
 
-##Live Deployed Website (Render)\
+##Live Deployed Website (Render)
 
-https://emi-calculator-oan5.onrender.com/static/index.html\
+https://emi-calculator-oan5.onrender.com/static/index.html
 
-https://emi-calculator-oan5.onrender.com/docs\
+https://emi-calculator-oan5.onrender.com/docs
 
-https://emi-calculator-oan5.onrender.com/history\
+https://emi-calculator-oan5.onrender.com/history
