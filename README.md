@@ -78,6 +78,6 @@ emi-calculator/
 ```
 
 ##Live Deployed Website (Render)
-https://emi-calculator-oan5.onrender.com/static/index.html
-https://emi-calculator-oan5.onrender.com/docs
+https://emi-calculator-oan5.onrender.com/static/index.html \n
+https://emi-calculator-oan5.onrender.com/docs\n
 https://emi-calculator-oan5.onrender.com/history
