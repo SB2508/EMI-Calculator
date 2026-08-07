@@ -11,14 +11,16 @@
     rel="stylesheet">
   <style>
     :root {
-      --ink: #F5F5DC;
-      --ink-soft: #F5F5DC;
-      --paper: #EDEAE1;
-      --paper-dim: #B9B4A6;
-      --gold: #9F1D35;
-      --gold-dim: #9F1D35;
-      --rule: #F5F5DC;
-      --green: #6FA97A;
+      --bg: #F6EDDD;
+      --panel: #EFE2C7;
+      --ink: #2E1418;
+      --ink-dim: #8A7057;
+      --burgundy: #7A1F2E;
+      --burgundy-light: #9C2C3B;
+      --burgundy-dark: #591420;
+      --cream: #FBF5E8;
+      --rule: #D9C7A4;
+      --error: #B23A2E;
     }
 
     * {
@@ -28,8 +30,8 @@
     html,
     body {
       margin: 0;
-      background: var(--ink);
-      color: var(--paper);
+      background: var(--bg);
+      color: var(--ink);
       font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
     }
@@ -51,7 +53,7 @@
       font-size: 12px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--burgundy);
       margin-bottom: 10px;
     }
 
@@ -61,10 +63,11 @@
       font-size: 34px;
       margin: 0 0 8px;
       letter-spacing: -0.01em;
+      color: var(--ink);
     }
 
     .sub {
-      color: var(--paper-dim);
+      color: var(--ink-dim);
       font-size: 15px;
       max-width: 46ch;
       line-height: 1.5;
@@ -84,15 +87,15 @@
       font-size: 12px;
       font-family: 'JetBrains Mono', monospace;
       letter-spacing: 0.04em;
-      color: var(--paper-dim);
+      color: var(--ink-dim);
       text-transform: uppercase;
     }
 
     input {
-      background: var(--ink-soft);
+      background: var(--panel);
       border: 1px solid var(--rule);
       border-radius: 4px;
-      color: var(--paper);
+      color: var(--ink);
       padding: 10px 12px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 15px;
@@ -100,13 +103,13 @@
 
     input:focus {
       outline: none;
-      border-color: var(--gold);
+      border-color: var(--burgundy);
     }
 
     button {
       grid-column: 1 / -1;
-      background: var(--gold);
-      color: var(--ink);
+      background: var(--burgundy);
+      color: var(--cream);
       border: none;
       border-radius: 4px;
       padding: 12px 16px;
@@ -118,11 +121,11 @@
     }
 
     button:hover {
-      background: #DBB65C;
+      background: var(--burgundy-light);
     }
 
     button:focus-visible {
-      outline: 2px solid var(--paper);
+      outline: 2px solid var(--burgundy-dark);
       outline-offset: 2px;
     }
 
@@ -152,7 +155,7 @@
       font-size: 11px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--paper-dim);
+      color: var(--ink-dim);
     }
 
     .figures {
@@ -167,7 +170,7 @@
     }
 
     .figure {
-      background: var(--ink-soft);
+      background: var(--panel);
       padding: 18px 16px;
     }
 
@@ -176,7 +179,7 @@
       font-family: 'JetBrains Mono', monospace;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: var(--paper-dim);
+      color: var(--ink-dim);
       margin-bottom: 8px;
     }
 
@@ -184,7 +187,7 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 22px;
       font-weight: 700;
-      color: var(--gold);
+      color: var(--burgundy);
     }
 
     table {
@@ -196,7 +199,7 @@
 
     thead th {
       text-align: right;
-      color: var(--paper-dim);
+      color: var(--ink-dim);
       font-weight: 500;
       font-size: 11px;
       text-transform: uppercase;
@@ -213,7 +216,8 @@
     tbody td {
       text-align: right;
       padding: 8px 10px;
-      border-bottom: 1px solid rgba(51, 56, 74, 0.5);
+      border-bottom: 1px solid rgba(217, 199, 164, 0.6);
+      color: var(--ink);
     }
 
     .schedule-scroll {
@@ -221,17 +225,18 @@
       overflow-y: auto;
       border: 1px solid var(--rule);
       border-radius: 6px;
+      background: var(--cream);
     }
 
     .status {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
-      color: var(--paper-dim);
+      color: var(--ink-dim);
       margin-top: 8px;
     }
 
     .status.error {
-      color: #D97757;
+      color: var(--error);
     }
 
     @media (max-width: 640px) {
