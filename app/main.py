@@ -1,19 +1,20 @@
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
+from typing import List
 
 from app import models
 from app.database import engine, get_db
-from app.emi_logic import build_amortization_schedule, calculate_totals
 from app.schemas import (
-    AmortizationResponse,
     EMIRequest,
     EMIResponse,
-    HistoryItem,
+    AmortizationResponse,
     PrepaymentRequest,
     PrepaymentResponse,
+    HistoryItem,
 )
+from app.emi_logic import calculate_totals, build_amortization_schedule
 
 # Creates tables on startup if they don't exist yet
 models.Base.metadata.create_all(bind=engine)
@@ -50,9 +51,7 @@ def calculate_emi_endpoint(payload: EMIRequest, db: Session = Depends(get_db)):
     db.add(record)
     db.commit()
 
-    return EMIResponse(
-        emi=emi, total_payment=total_payment, total_interest=total_interest
-    )
+    return EMIResponse(emi=emi, total_payment=total_payment, total_interest=total_interest)
 
 
 @app.post("/calculate/amortization", response_model=AmortizationResponse)
@@ -101,7 +100,7 @@ def prepayment_endpoint(payload: PrepaymentRequest):
     )
 
 
-@app.get("/history", response_model=list[HistoryItem])
+@app.get("/history", response_model=List[HistoryItem])
 def get_history(limit: int = 20, db: Session = Depends(get_db)):
     records = (
         db.query(models.Calculation)

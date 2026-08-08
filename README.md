@@ -77,10 +77,9 @@ emi-calculator/
 └── README.md
 ```
 
-##Live Deployed Website (Render)
+## What's next
 
-https://emi-calculator-oan5.onrender.com/static/index.html
-
-https://emi-calculator-oan5.onrender.com/docs
-
-https://emi-calculator-oan5.onrender.com/history
+- Deploy to Railway/Render with a MySQL add-on
+- Add JWT-based auth so `/history` is scoped per user instead of global
+- Add automated tests (pytest) covering the EMI formula against known reference values
+- Add a "compare two loan offers" endpoint
